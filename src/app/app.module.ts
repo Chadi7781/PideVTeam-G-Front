@@ -24,6 +24,8 @@ import {VisiteComponent} from "./visite/visite.component";
 import {VisiteFormComponent} from "./visite-form/visite-form.component";
 import { UpdateVisiteFormComponent } from './update-visite-form/update-visite-form.component';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';  
 @NgModule({
     declarations: [
       AppComponent,
@@ -54,6 +56,7 @@ imports: [
   HttpClientModule,
   FormsModule,
   ReactiveFormsModule,
+  AppRoutingModule,BrowserAnimationsModule, BsDatepickerModule.forRoot()  
 
 
 ],

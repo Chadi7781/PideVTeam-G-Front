@@ -2,7 +2,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {Component, NgZone, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import { CrudServiceVisite } from '../service/service-visite/crud-visite.service';
-import moment from 'moment'
 
 @Component({
   selector: 'app-visite',
@@ -10,9 +9,7 @@ import moment from 'moment'
   styleUrls: ['./visite.component.css']
 })
 export class VisiteComponent implements OnInit {
-  myDateValue: Date;
-  toDate:Date;
-  duplicateArray=[]
+  
   visites:any=[];
   lieu:any;
   nomLieu:any
@@ -25,7 +22,8 @@ export class VisiteComponent implements OnInit {
     
     ) { }
 
-   
+    dataBeforeParse : any;
+    dataAfterParse : any;
     ngOnInit(): void {
       this.showForm=false;
       this.showDistance=false;
@@ -37,10 +35,7 @@ export class VisiteComponent implements OnInit {
 
        }); 
 
-       this.duplicateArray=this.visites;
-       this.myDateValue = new Date("12-08-2019");
-
-
+      
   }
 
   getLieuById (nomLieu:any) :any {
@@ -83,35 +78,18 @@ export class VisiteComponent implements OnInit {
       }
     }
 
+    model : any={};    
+
+    searchdata() {  
  
 
-
-
-    //SEARCH METIER ::
-    onDateChange(newDate: Date) {
-      console.log(newDate);
-    }
-  
-     reverseAndTimeStamp(dateString:any) {
-          const reverse = new Date(dateString.split("-").reverse().join("-"));
-          return reverse.getTime();
-          }
-      filterDate() {
-          let fromdate=moment(this.myDateValue).format('DD-MM-YYYY');
-      console.log(fromdate)
-      let todate=moment(this.toDate).format('DD-MM-YYYY');
-      if(this.myDateValue && this.toDate){
-      const selectedMembers = this.visites.filter((m: { fromDate: any; }) => {
-              return this.reverseAndTimeStamp(m.fromDate) >= this.reverseAndTimeStamp(fromdate) && this.reverseAndTimeStamp(m.fromDate) <= this.reverseAndTimeStamp(todate)
-          }
-          );
-          this.duplicateArray=selectedMembers
-      }else{
-  this.duplicateArray=this.visites
-      }
-          
-          console.log(this.duplicateArray); // the result objects
-      }
-  
-
-  }
+       this.crudService.SearchBetweenDates(this.model).subscribe((res: any) => {  
+        this.model.DateD= new Date(res.DateD);
+        this.model.DateF= new Date(res.DateF);
+        this.visites.DateD = this.model.DateD;
+        this.visites.DateF = this.model.DateF;
+           this.visites=res;   
+           alert(JSON.stringify(res));   
+       })  
+     }  
+   }  
